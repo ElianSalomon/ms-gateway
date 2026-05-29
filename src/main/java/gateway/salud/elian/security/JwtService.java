@@ -1,6 +1,9 @@
 package gateway.salud.elian.security;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 import javax.crypto.SecretKey;
 
@@ -35,5 +38,19 @@ public class JwtService {
         } catch (Exception exception) {
             return false;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> extractRoles(Claims claims) {
+        Object rolesClaim = claims.get("roles");
+
+        if (rolesClaim instanceof List<?> roles) {
+            return roles.stream()
+                    .filter(Objects::nonNull)
+                    .map(String::valueOf)
+                    .toList();
+        }
+
+        return Collections.emptyList();
     }
 }
